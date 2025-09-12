@@ -71,6 +71,7 @@ docker-compose.override.yml
 # dotenv
 .env
 .env.*
+!.env.sample
 
 # Sistema operacional
 .DS_Store
