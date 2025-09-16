@@ -1,4 +1,4 @@
 #!/bin/bash
 set -e
-touch main.cpp
+echo "entrypoint.sh executado com sucesso!"
 exec "$@" # executa o que vem de CMD no dockerfile

@@ -22,12 +22,7 @@ RUN curl -sSL https://install.python-poetry.org | python3 - \
 COPY pyproject.toml poetry.lock ./
 
 RUN poetry config virtualenvs.create false \
-    && poetry install --no-interaction --no-ansi --no-dev
-
-
-COPY requirements.txt .
-
-RUN pip install --no-cache-dir -r requirements.txt
+    && poetry install --no-interaction --no-ansi
 
 COPY . .
 COPY docker/entrypoint.sh /usr/local/bin/entrypoint.sh
