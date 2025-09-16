@@ -12,6 +12,19 @@ RUN apt update && apt install -y --no-install-recommends \
     && apt clean \
     && rm -rf /var/lib/apt/lists/*
 
+
+# Instala o Poetry
+RUN curl -sSL https://install.python-poetry.org | python3 - \
+    && ln -s /root/.local/bin/poetry /usr/local/bin/poetry
+
+
+# Copiar arquivos de dependências
+COPY pyproject.toml poetry.lock ./
+
+RUN poetry config virtualenvs.create false \
+    && poetry install --no-interaction --no-ansi --no-dev
+
+
 COPY requirements.txt .
 
 RUN pip install --no-cache-dir -r requirements.txt
