@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Página de Teste</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+        }
+        h1 {
+            color: #333;
+        }
+        button {
+            padding: 10px 20px;
+            margin-top: 20px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <h1>Página de Teste</h1>
+    <p>Esta é uma página HTML básica para testes.</p>
+    <button id="testeButton">Clique aqui</button>
+
+    <script>
+        const button = document.getElementById('testeButton');
+        button.addEventListener('click', () => {
+            alert('Você clicou no botão!');
+        });
+    </script>
+</body>
+</html>
