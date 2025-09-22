@@ -7,9 +7,9 @@ services:
     environment:
       - GEMINI_API_KEY=${GEMINI_API_KEY}
       - FLASK_ENV=${FLASK_ENV}
-      - MONGODB_URI=${MONGODB_URI}
+      - DATABASE_URL=postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB}
     depends_on:
-      - mongo
+      - postgres
     networks:
       - datathon
     volumes:
@@ -17,23 +17,22 @@ services:
     ports:
       - 5000:5000
 
-  mongo:
-    image: mongo:6.0
-    #container_name: mongo-server
+  postgres:
+    image: postgres:16
     restart: always
     environment:
-      - MONGO_INITDB_ROOT_USERNAME=${MONGO_INITDB_ROOT_USERNAME}
-      - MONGO_INITDB_ROOT_PASSWORD=${MONGO_INITDB_ROOT_PASSWORD}
-      - MONGO_INITDB_DATABASE=${MONGO_INITDB_DATABASE}
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_DB=${POSTGRES_DB}
     ports:
-      - 27017:27017
+      - "5432:5432"
     volumes:
-      - mongo_data:/data/db
+      - postgres_data:/var/lib/postgresql/data
     networks:
       - datathon
 
 volumes:
-  mongo_data:
+  postgres_data:
 
 networks:
   datathon:
