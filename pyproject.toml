@@ -11,6 +11,7 @@ requires-python = "^3.12"
 dependencies = [
     "flask (>=3.1.2,<4.0.0)",
     "google-genai (>=1.39.1,<2.0.0)",
+    "redis (>=6.4.0,<7.0.0)",
 ]
 
 [tool.poetry]

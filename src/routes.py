@@ -16,7 +16,6 @@ def upload_files():
 
     vagas_file = request.files["vagas"]
     candidatos_file = request.files["candidatos"]
-    print('tipo:', type(vagas_file))
     # Verifica se os arquivos têm extensão .json
     if not vagas_file.filename.endswith(".json") or not candidatos_file.filename.endswith(".json"):
         return jsonify({"error": "Os arquivos devem ser no formato .json."}), 400
