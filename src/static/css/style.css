@@ -66,6 +66,23 @@ body {
   display: none; /* escondido por padrão */
 }
 
+/* Mensagem de sucesso/erro do envio */
+.upload-message {
+  margin-top: 12px;
+  font-size: 0.95rem;
+  font-weight: bold;
+  text-align: center;
+  display: none;
+}
+
+.upload-message.success {
+  color: #28a745; /* verde */
+}
+
+.upload-message.error {
+  color: #dc3545; /* vermelho */
+}
+
 /* Footer fixado */
 footer {
   position: relative;
@@ -73,4 +90,17 @@ footer {
   width: 100%;
 }
 
+
+/* Botão de envio */
+#uploadBtn {
+  font-size: 1.2rem;
+  padding: 15px;
+  font-weight: bold;
+  border-radius: 10px;
+  transition: all 0.3s ease;
+}
+
+#uploadBtn:hover {
+  background-color: #0056b3;
+}
 
