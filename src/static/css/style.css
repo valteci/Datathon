@@ -33,9 +33,11 @@ body {
   cursor: pointer;
   transition: all 0.3s ease;
   margin-top: 15px;
+  background-color: #fff;
 }
 
-.upload-box:hover {
+.upload-box:hover,
+.upload-box.dragover {
   background-color: #f1f9ff;
   border-color: #0056b3;
 }
@@ -55,9 +57,20 @@ body {
   text-align: center;
 }
 
+.error-message {
+  margin-top: 8px;
+  font-size: 0.85rem;
+  font-weight: bold;
+  color: #dc3545; /* vermelho bootstrap */
+  text-align: center;
+  display: none; /* escondido por padrão */
+}
+
 /* Footer fixado */
 footer {
   position: relative;
   bottom: 0;
   width: 100%;
 }
+
+

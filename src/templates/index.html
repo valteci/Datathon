@@ -28,7 +28,7 @@
           <p>Faça upload do arquivo de vagas</p>
           
           <!-- Área de upload -->
-          <label class="upload-box">
+          <label class="upload-box" data-type="vagas">
             <input type="file" id="vagasFile" accept=".json" hidden>
             <div class="upload-content">
               <i class="bi bi-upload fs-1"></i>
@@ -37,6 +37,7 @@
             </div>
           </label>
           <div id="vagasFileName" class="file-name"></div>
+          <div id="vagasError" class="error-message"></div>
         </div>
       </div>
 
@@ -47,7 +48,7 @@
           <p>Faça upload do arquivo de candidatos</p>
           
           <!-- Área de upload -->
-          <label class="upload-box">
+          <label class="upload-box" data-type="candidatos">
             <input type="file" id="candidatosFile" accept=".json" hidden>
             <div class="upload-content">
               <i class="bi bi-upload fs-1"></i>
@@ -56,6 +57,7 @@
             </div>
           </label>
           <div id="candidatosFileName" class="file-name"></div>
+          <div id="candidatosError" class="error-message"></div>
         </div>
       </div>
     </div>
