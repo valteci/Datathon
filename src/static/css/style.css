@@ -1,4 +1,4 @@
-/* Ajustes gerais */
+/* Geral */
 body {
   font-family: Arial, sans-serif;
   background-color: #f9f9f9;
@@ -14,14 +14,48 @@ body {
 .content-box {
   background: #ffffff;
   border: 1px solid #ddd;
-  padding: 20px;
+  padding: 30px;
   border-radius: 12px;
   box-shadow: 0 4px 8px rgba(0,0,0,0.05);
   text-align: center;
-  min-height: 200px; /* apenas para visualização */
+  min-height: 280px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
-/* Footer sempre no fim da tela */
+/* Upload estilizado */
+.upload-box {
+  border: 2px dashed #007bff;
+  border-radius: 10px;
+  padding: 30px;
+  display: block;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin-top: 15px;
+}
+
+.upload-box:hover {
+  background-color: #f1f9ff;
+  border-color: #0056b3;
+}
+
+.upload-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  color: #007bff;
+}
+
+.file-name {
+  margin-top: 10px;
+  font-size: 0.9rem;
+  font-weight: bold;
+  color: #333;
+  text-align: center;
+}
+
+/* Footer fixado */
 footer {
   position: relative;
   bottom: 0;
