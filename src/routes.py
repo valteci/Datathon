@@ -25,6 +25,7 @@ def upload_files():
 
         # Carrega vagas no Redis
         loader.load_vagas(vagas_file)
+        loader.load_applicants(candidatos_file)
 
         return jsonify({
             "message": "Arquivos recebidos e vagas salvas no Redis com sucesso!",

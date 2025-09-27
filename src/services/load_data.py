@@ -11,9 +11,9 @@ class Load:
         if (not self.redis_url_0) or (not self.redis_url_1) or (not self.redis_url_2) :
             raise RuntimeError("Variável de ambiente REDIS_URL_0, REDIS_URL_1 ou REDIS_URL_2 não encontrada.")
 
-        self.redis_db0 = redis.from_url(self.redis_url_0)
-        self.redis_db1 = redis.from_url(self.redis_url_1)
-        self.redis_db2 = redis.from_url(self.redis_url_2)
+        self.redis_db0 = redis.from_url(self.redis_url_0) # armazena area de atuacao
+        self.redis_db1 = redis.from_url(self.redis_url_1) # armazena principais_atividades + competencia_tecnicas_e_comportamentais 
+        self.redis_db2 = redis.from_url(self.redis_url_2) # armazena cv_pt do candidato
 
 
     def load_vagas(self, vagas_file) -> None:
@@ -45,5 +45,21 @@ class Load:
         except Exception as e:
             raise RuntimeError(f"Erro ao carregar vagas: {e}")
 
-    def load_applicants(self,) -> None:
-        pass
+
+    def load_applicants(self, candidatos_file) -> None:
+        """
+        Processa candidatos.json e salva no DB 2 do Redis:
+        - DB 2: chave=id_candidato, valor=cv_pt
+        """
+        try:
+            candidatos_data = json.load(candidatos_file)
+
+            for candidato_id, candidato_info in candidatos_data.items():
+                cv_pt = candidato_info.get("cv_pt", "").strip()
+
+                # Salva no Redis apenas se houver conteúdo no cv_pt
+                if cv_pt:
+                    self.redis_db2.set(candidato_id, cv_pt)
+
+        except Exception as e:
+            raise RuntimeError(f"Erro ao carregar candidatos: {e}")
