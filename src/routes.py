@@ -1,12 +1,13 @@
 from flask import Blueprint, render_template, request, jsonify
 from src.services.load_data import Load
-from src.services.retrieve_data import Chroma_db
+from src.services.gemini_api import Teste
 
 # cria um blueprint chamado "main"
 bp = Blueprint("main", __name__)
 
 @bp.route("/")
 def index():
+    teste = Teste()
     return render_template("index.html")
 
 @bp.route("/upload", methods=["POST"])
