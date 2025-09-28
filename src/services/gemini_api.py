@@ -4,7 +4,7 @@ import numpy as np
 from sklearn.metrics.pairwise import cosine_similarity
 from src.services.retrieve_data import ChromaDB
 import os
-class Teste:
+class Api:
     def __init__(self):
         client = genai.Client(api_key=os.getenv('GEMINI_API_KEY'))
 
@@ -33,3 +33,4 @@ class Teste:
         print("ids:", res.get("ids"))
         print("distances:", res.get("distances"))
         print("similarities:", res.get("similarities"))
+

@@ -7,7 +7,7 @@ bp = Blueprint("main", __name__)
 
 @bp.route("/")
 def index():
-    teste = Teste()
+    #teste = Teste()
     return render_template("index.html")
 
 @bp.route("/upload", methods=["POST"])
