@@ -10,8 +10,10 @@ services:
       - REDIS_URL_0=redis://:${REDIS_PASSWORD}@redis:6379/0
       - REDIS_URL_1=redis://:${REDIS_PASSWORD}@redis:6379/1
       - REDIS_URL_2=redis://:${REDIS_PASSWORD}@redis:6379/2
+      - CHROMA_URL=http://chromadb:8000
     depends_on:
       - redis
+      - chromadb
     networks:
       - datathon
     volumes:
@@ -30,8 +32,20 @@ services:
     networks:
       - datathon
 
+  chromadb:
+    image: chromadb/chroma:latest
+    container_name: chroma-server
+    restart: always
+    ports:
+      - "8000:8000"
+    volumes:
+      - chroma_data:/chroma
+    networks:
+      - datathon
+
 volumes:
   redis_data:
+  chroma_data:
 
 networks:
   datathon:

@@ -1,5 +1,6 @@
 from flask import Blueprint, render_template, request, jsonify
 from src.services.load_data import Load
+from src.services.retrieve_data import Chroma_db
 
 # cria um blueprint chamado "main"
 bp = Blueprint("main", __name__)
@@ -23,7 +24,7 @@ def upload_files():
     try:
         loader = Load()
 
-        # Carrega vagas no Redis
+        # Carrega vagas e candidados no Redis
         loader.load_vagas(vagas_file)
         loader.load_applicants(candidatos_file)
 
