@@ -1,5 +1,6 @@
 from flask import Blueprint, render_template, request, jsonify
-from src.services.load_data import Load
+from src.services.Data import Data
+from src.services.gemini_api import Model
 #from src.services.gemini_api import Teste
 
 # cria um blueprint chamado "main"
@@ -21,7 +22,7 @@ def upload_files():
         return jsonify({"error": "O arquivo deve ser no formato .json."}), 400
     
     try:
-        loader = Load()
+        loader = Data()
 
         # Carrega vagas e candidados no Redis
         loader.load_vagas(vagas_file)
@@ -47,11 +48,11 @@ def predict():
         return jsonify({"error": "JSON invalido."}), 400
 
     # Extrair campos
-    job_id = data.get("job_id")
+    vaga_id = data.get("job_id")
     k = data.get("k")
 
     # Validações
-    if not job_id or not isinstance(job_id, str):
+    if not vaga_id or not isinstance(vaga_id, str):
         return jsonify({"error": "Campo 'job_id' e obrigatorio e deve ser uma string."}), 400
 
     if k is None:
@@ -64,10 +65,19 @@ def predict():
     except (ValueError, TypeError):
         return jsonify({"error": "Campo 'k' deve ser um numero inteiro."}), 400
 
+
+    dados = Data()
+    model = Model()
+
+    descricao_vaga = dados.get_vaga_descricao(vaga_id)
+    print(descricao_vaga)
+    result = model.predict(descricao_vaga)
+    print('tipo:', type(result))
+
     # (Por enquanto apenas retorna os valores validados)
     return jsonify({
         "message": "Parametros recebidos com sucesso.",
-        "job_id": job_id,
+        "job_id": vaga_id,
         "k": k
     }), 200
 
