@@ -113,3 +113,20 @@ document.addEventListener("DOMContentLoaded", function() {
     setupDragAndDrop('[data-type="vagas"]', "vagasFile", "vagasFileName", "vagasError");
     setupUploadButton();
 });
+
+
+document.addEventListener("DOMContentLoaded", function () {
+  const buscarBtn = document.getElementById("buscarBtn");
+  if (buscarBtn) {
+    buscarBtn.addEventListener("click", function () {
+      // Aqui vamos implementar o fetch depois.
+      // Por enquanto, só garante a UX básica (ex.: limpar estado vazio, etc).
+      // Exemplo (comentado):
+      // const jobId = document.getElementById("jobIdInput").value.trim();
+      // if (!jobId) return;
+      // document.querySelector("#resultsBody").innerHTML = `
+      //   <tr><td>123</td><td>Fulano da Silva</td>
+      //   <td class="resume-cell">Texto do currículo...</td></tr>`;
+    });
+  }
+});

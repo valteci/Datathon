@@ -1,4 +1,6 @@
-/* Geral */
+/* =========================
+   Base / Layout
+   ========================= */
 body {
   font-family: Arial, sans-serif;
   background-color: #f9f9f9;
@@ -10,7 +12,16 @@ body {
   height: auto;
 }
 
-/* Box de conteúdo */
+/* Footer sempre no fim */
+footer {
+  position: relative;
+  bottom: 0;
+  width: 100%;
+}
+
+/* =========================
+   Cartões / Upload
+   ========================= */
 .content-box {
   background: #ffffff;
   border: 1px solid #ddd;
@@ -35,20 +46,17 @@ body {
   margin-top: 15px;
   background-color: #fff;
 }
-
 .upload-box:hover,
 .upload-box.dragover {
   background-color: #f1f9ff;
   border-color: #0056b3;
 }
-
 .upload-content {
   display: flex;
   flex-direction: column;
   align-items: center;
   color: #007bff;
 }
-
 .file-name {
   margin-top: 10px;
   font-size: 0.9rem;
@@ -57,7 +65,7 @@ body {
   text-align: center;
 }
 
-/* Mensagens de erro */
+/* Mensagens de erro dos inputs de arquivo */
 .error-message {
   margin-top: 8px;
   font-size: 0.85rem;
@@ -67,17 +75,49 @@ body {
   display: none;
 }
 
-/* Botão de envio */
+/* =========================
+   Botões
+   ========================= */
+/* Botão principal (Upload) – CTA grande */
 #uploadBtn {
   font-size: 1.2rem;
   padding: 15px;
   font-weight: bold;
   border-radius: 10px;
-  transition: all 0.3s ease;
+  transition: all 0.2s ease-in-out;
+  background-color: var(--bs-primary);
+  border-color: var(--bs-primary);
+}
+#uploadBtn:hover {
+  background-color: #0b5ed7; /* hover primary bootstrap */
+  border-color: #0a58ca;
+}
+#uploadBtn:active,
+#uploadBtn:focus {
+  background-color: #0a58ca;
+  border-color: #0a53be;
+  box-shadow: 0 0 0 .25rem rgba(13,110,253,.25);
 }
 
-#uploadBtn:hover {
-  background-color: #0056b3;
+/* Botão de busca – tamanho do input (não usar .btn-lg no HTML) */
+#buscarBtn {
+  font-size: 1rem;
+  padding: .5rem 1rem;        /* altura próxima da .form-control */
+  font-weight: 600;
+  border-radius: .5rem;       /* combina com cantos do input */
+  transition: all 0.2s ease-in-out;
+  background-color: var(--bs-primary);
+  border-color: var(--bs-primary);
+}
+#buscarBtn:hover {
+  background-color: #0b5ed7;
+  border-color: #0a58ca;
+}
+#buscarBtn:active,
+#buscarBtn:focus {
+  background-color: #0a58ca;
+  border-color: #0a53be;
+  box-shadow: 0 0 0 .25rem rgba(13,110,253,.25);
 }
 
 /* Mensagem de sucesso/erro do envio */
@@ -88,18 +128,63 @@ body {
   text-align: center;
   display: none;
 }
+.upload-message.success { color: #28a745; } /* verde */
+.upload-message.error   { color: #dc3545; } /* vermelho */
 
-.upload-message.success {
-  color: #28a745; /* verde */
+/* Label mais próximo do input */
+.form-label.mb-1 { margin-bottom: .25rem !important; }
+
+/* =========================
+   Seção de Resultados
+   ========================= */
+.section-divider {
+  margin: 3rem 0 2rem;   /* mais respiro entre seções */
+  border: 0;
+  border-top: 2px solid #e5e7eb;
+  opacity: 1;
 }
 
-.upload-message.error {
-  color: #dc3545; /* vermelho */
+.results-section, .form-text {
+  margin-top: 0.5rem;
 }
 
-/* Footer sempre no fim */
-footer {
-  position: relative;
-  bottom: 0;
-  width: 100%;
+/* Tabela */
+.results-table .col-id    { width: 140px; }
+.results-table .col-name  { width: 220px; }
+.results-table .col-resume{ width: auto; }
+
+/* Quebra de linha no texto do currículo */
+.results-table td.resume-cell,
+.results-table td:nth-child(3) {
+  white-space: normal;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+
+/* Estado de tabela vazia */
+.results-table .empty-row td {
+  font-size: 0.95rem;
+}
+
+/* Botões: focus ring só quando navegado por teclado */
+#uploadBtn:focus-visible,
+#buscarBtn:focus-visible {
+  box-shadow: 0 0 0 .25rem rgba(13,110,253,.25);
+}
+
+#uploadBtn:focus,
+#buscarBtn:focus {
+  box-shadow: none; /* anula o foco “sempre ativo” do mouse */
+}
+
+/* =========================
+   Responsividade
+   ========================= */
+@media (min-width: 768px) {
+  .k-compact { max-width: 200px; }
+}
+
+@media (max-width: 576px) {
+  .results-table .col-id   { width: 100px; }
+  .results-table .col-name { width: 160px; }
 }
