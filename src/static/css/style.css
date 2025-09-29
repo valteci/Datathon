@@ -57,13 +57,27 @@ body {
   text-align: center;
 }
 
+/* Mensagens de erro */
 .error-message {
   margin-top: 8px;
   font-size: 0.85rem;
   font-weight: bold;
   color: #dc3545; /* vermelho bootstrap */
   text-align: center;
-  display: none; /* escondido por padrão */
+  display: none;
+}
+
+/* Botão de envio */
+#uploadBtn {
+  font-size: 1.2rem;
+  padding: 15px;
+  font-weight: bold;
+  border-radius: 10px;
+  transition: all 0.3s ease;
+}
+
+#uploadBtn:hover {
+  background-color: #0056b3;
 }
 
 /* Mensagem de sucesso/erro do envio */
@@ -83,24 +97,9 @@ body {
   color: #dc3545; /* vermelho */
 }
 
-/* Footer fixado */
+/* Footer sempre no fim */
 footer {
   position: relative;
   bottom: 0;
   width: 100%;
 }
-
-
-/* Botão de envio */
-#uploadBtn {
-  font-size: 1.2rem;
-  padding: 15px;
-  font-weight: bold;
-  border-radius: 10px;
-  transition: all 0.3s ease;
-}
-
-#uploadBtn:hover {
-  background-color: #0056b3;
-}
-

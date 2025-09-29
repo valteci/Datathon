@@ -4,12 +4,15 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Decision - Datathon</title>
+
   <!-- CSS -->
   <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+
   <!-- Bootstrap -->
-  <link 
-    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" 
-    rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+  <!-- Bootstrap icons (para o ícone de upload) -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
 </head>
 <body class="d-flex flex-column min-vh-100">
 
@@ -21,12 +24,12 @@
   <!-- Conteúdo principal -->
   <main class="container flex-grow-1 my-5">
     <div class="row">
-      <!-- Coluna Vagas -->
-      <div class="col-md-6 col-12 mb-4">
+      <!-- Coluna única: Vagas -->
+      <div class="col-12 mb-4">
         <div class="content-box">
           <h3>Vagas</h3>
           <p>Faça upload do arquivo de vagas</p>
-          
+
           <!-- Área de upload -->
           <label class="upload-box" data-type="vagas">
             <input type="file" id="vagasFile" accept=".json" hidden>
@@ -40,32 +43,13 @@
           <div id="vagasError" class="error-message"></div>
         </div>
       </div>
-
-      <!-- Coluna Candidatos -->
-      <div class="col-md-6 col-12 mb-4">
-        <div class="content-box">
-          <h3>Candidatos</h3>
-          <p>Faça upload do arquivo de candidatos</p>
-          
-          <!-- Área de upload -->
-          <label class="upload-box" data-type="candidatos">
-            <input type="file" id="candidatosFile" accept=".json" hidden>
-            <div class="upload-content">
-              <i class="bi bi-upload fs-1"></i>
-              <p class="mb-0">Clique ou arraste o arquivo aqui</p>
-              <small class="text-muted">Somente arquivos .json</small>
-            </div>
-          </label>
-          <div id="candidatosFileName" class="file-name"></div>
-          <div id="candidatosError" class="error-message"></div>
-        </div>
-      </div>
     </div>
-  <!-- Botão de envio -->
+
+    <!-- Botão de envio (ocupa a largura das colunas) -->
     <div class="row mt-4">
       <div class="col-12">
         <button id="uploadBtn" class="btn btn-primary btn-lg w-100">
-          Enviar Arquivos
+          Enviar Arquivo
         </button>
         <div id="uploadMessage" class="upload-message"></div>
       </div>
@@ -80,9 +64,5 @@
   <!-- JS -->
   <script src="{{ url_for('static', filename='js/script.js') }}"></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-  <!-- Bootstrap icons -->
-  <link 
-    rel="stylesheet" 
-    href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
 </body>
 </html>
