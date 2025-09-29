@@ -303,7 +303,7 @@ def ver_embeddings_preview(
         else:
             print("  doc/preview: <vazio>")
 
-#diagnostico()
+diagnostico()
 
 
 # 1) Ver um "snapshot" de 20 linhas da coleção 768 (com prévia do documento)
@@ -323,6 +323,6 @@ def ver_embeddings_preview(
 
 
 
-#ver_embeddings_preview(dim=3072, limit=3, n=10)
+ver_embeddings_preview(dim=3072, limit=3, n=10)
 # ou para IDs específicos:
 #ver_embeddings_preview(dim=3072, ids=["36545", "30624"], n=6)
