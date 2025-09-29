@@ -39,13 +39,15 @@ services:
     ports:
       - "8000:8000"
     volumes:
-      - chroma_data:/chroma
+#      - chroma_data:/chroma
+      - chroma_data2:/chroma
     networks:
       - datathon
 
 volumes:
   redis_data:
-  chroma_data:
+#  chroma_data:
+  chroma_data2:
 
 networks:
   datathon:

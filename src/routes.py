@@ -1,6 +1,6 @@
 from flask import Blueprint, render_template, request, jsonify
 from src.services.load_data import Load
-from src.services.gemini_api import Teste
+#from src.services.gemini_api import Teste
 
 # cria um blueprint chamado "main"
 bp = Blueprint("main", __name__)
