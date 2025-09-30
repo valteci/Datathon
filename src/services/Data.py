@@ -74,52 +74,49 @@ class Data:
 
     def get_candidatos(self, id: list) -> str:
         """
-        Recebe uma lista de IDs (strings ou ints) e retorna uma string JSON com:
+        Lê database/applicants.json e retorna:
         {"candidatos": [{"id": "...", "nome": "...", "cv_pt": "..."}, ...]}
-        Requer que self.candidatos (ou similar) seja um dict com os dados carregados.
         """
-        # Descobre onde está o dict base (ajuste o nome se o seu atributo for outro)
-        base = getattr(self, "candidatos", None) \
-            or getattr(self, "applicants", None) \
-            or getattr(self, "candidatos_json", None) \
-            or getattr(self, "applicants_json", None)
+        if not isinstance(id, list):
+            raise ValueError("Parâmetro `id` deve ser uma lista.")
 
-        if base is None or not isinstance(base, dict):
-            raise RuntimeError("Base de candidatos não carregada (ex.: self.candidatos deve ser um dict).")
+        # Carrega o JSON do disco (simples e direto)
+        try:
+            with open("database/applicants.json", "r", encoding="utf-8") as f:
+                base = json.load(f)  # dict com chaves = ids
+        except FileNotFoundError:
+            raise FileNotFoundError("Arquivo 'database/applicants.json' não encontrado.")
+        except json.JSONDecodeError as e:
+            raise ValueError(f"JSON inválido em 'database/applicants.json': {e}")
 
         resultados = []
         for cid in id:
             cid_str = str(cid)
             entry = base.get(cid_str)
-            if not entry or not isinstance(entry, dict):
-                # Se preferir falhar ao não achar, troque por um raise ou inclua mesmo assim com campos vazios
+            if not isinstance(entry, dict):
+                # Se preferir levantar erro quando não achar, troque por:
+                # raise KeyError(f"Candidato '{cid_str}' não encontrado no JSON.")
                 continue
 
-            # Nome pode estar em informacoes_pessoais.nome ou infos_basicas.nome
-            nome = None
-            info_pess = entry.get("informacoes_pessoais") or {}
-            if isinstance(info_pess, dict):
-                nome = info_pess.get("nome")
-
+            # `nome` pode estar em informacoes_pessoais.nome ou infos_basicas.nome
+            nome = ""
+            infos_pessoais = entry.get("informacoes_pessoais")
+            if isinstance(infos_pessoais, dict):
+                nome = infos_pessoais.get("nome") or ""
             if not nome:
-                infos_basicas = entry.get("infos_basicas") or {}
+                infos_basicas = entry.get("infos_basicas")
                 if isinstance(infos_basicas, dict):
-                    nome = infos_basicas.get("nome")
+                    nome = infos_basicas.get("nome") or ""
 
-            if not nome:
-                # fallback: se por acaso existir na raiz
-                nome = entry.get("nome", "")
-
-            cv_pt = entry.get("cv_pt", "")
+            cv_pt = entry.get("cv_pt", "") or ""
 
             resultados.append({
                 "id": cid_str,
-                "nome": nome or "",
-                "cv_pt": cv_pt or ""
+                "nome": nome,
+                "cv_pt": cv_pt
             })
 
         return json.dumps({"candidatos": resultados}, ensure_ascii=False)
-
 
 
 

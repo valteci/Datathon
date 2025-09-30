@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, request, jsonify
+from flask import Blueprint, render_template, request, jsonify, Response
 from src.services.Data import Data
 from src.services.gemini_api import Model
 #from src.services.gemini_api import Teste
@@ -70,15 +70,10 @@ def predict():
     model = Model()
 
     descricao_vaga = dados.get_vaga_descricao(vaga_id)
-    print(descricao_vaga)
-    result = model.predict(descricao_vaga)
-    print('tipo:', type(result))
+    candidatos_id = model.predict(descricao_vaga, k)['ids'][0]
 
-    # (Por enquanto apenas retorna os valores validados)
-    return jsonify({
-        "message": "Parametros recebidos com sucesso.",
-        "job_id": vaga_id,
-        "k": k
-    }), 200
+    candidatos_json = dados.get_candidatos(candidatos_id)
+
+    return Response(candidatos_json, status=200, mimetype="application/json")
 
 

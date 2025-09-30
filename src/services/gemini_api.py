@@ -26,10 +26,9 @@ class Model:
 
 
 
-    def predict(self, descricao_vaga: str):
+    def predict(self, descricao_vaga: str, k: int):
         # 1842
-        x = """• - .net full stack. • Experiência com tecnologias .net Core, .net Framework, C#, Razor e Orientação a Objetos.\n• Conhecimento em banco de dados, especialmente PostgreSQL.\n• Boa comunicação escrita e oral, pois terá contato direto com área usuária e demais fornecedores do cliente.\n• Experiência com metodologia Ágil (Scrum/Kanban).\n• Senso de organização e comprometimento com o time e suas demandas.\n• Ensino Superior Completo (áreas relacionadas a tecnologia da informação).\n• Conhecimento considerados diferenciais:\no Amazon Web Service (AWS);\no Pipelines;\no Testes Automatizados;\no Mercado financeiro, resseguro, previdência, etc."""
-        texts = [x]
+        texts = [descricao_vaga]
 
         result = [
             np.array(e.values) for e in self.client.models.embed_content(
@@ -40,5 +39,5 @@ class Model:
 
         vaga_embedding = np.array(result)[0]
         chroma = ChromaDB()
-        res = chroma.query_similar_by_embedding(vaga_embedding, top_k=1)
+        res = chroma.query_similar_by_embedding(vaga_embedding, top_k=k)
         return res

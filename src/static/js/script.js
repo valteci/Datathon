@@ -1,3 +1,56 @@
+function renderEmptyRow(message) {
+  const tbody = document.getElementById("resultsBody");
+  if (!tbody) return;
+  tbody.innerHTML = "";
+
+  const tr = document.createElement("tr");
+  tr.className = "empty-row";
+
+  const td = document.createElement("td");
+  td.colSpan = 3;
+  td.className = "text-center text-muted py-4";
+  td.textContent = message;
+
+  tr.appendChild(td);
+  tbody.appendChild(tr);
+}
+
+function renderResults(candidatos) {
+  const tbody = document.getElementById("resultsBody");
+  if (!tbody) return;
+  tbody.innerHTML = "";
+
+  if (!Array.isArray(candidatos) || candidatos.length === 0) {
+    renderEmptyRow("Nenhum candidato encontrado para essa vaga.");
+    return;
+  }
+
+  for (const c of candidatos) {
+    const tr = document.createElement("tr");
+
+    const tdId = document.createElement("td");
+    tdId.textContent = String(c?.id ?? "—");
+
+    const tdNome = document.createElement("td");
+    tdNome.textContent = c?.nome ?? "—";
+
+    const tdCv = document.createElement("td");
+    tdCv.className = "resume-cell"; // já tem CSS pra quebra de linha
+    tdCv.textContent = c?.cv_pt ?? "—";
+
+    tr.appendChild(tdId);
+    tr.appendChild(tdNome);
+    tr.appendChild(tdCv);
+    tbody.appendChild(tr);
+  }
+}
+
+
+
+
+
+
+
 // ===============================
 // Upload de arquivo (.json)
 // ===============================
@@ -136,15 +189,12 @@ function setupPredictButton() {
 
   if (!buscarBtn || !jobIdInput || !topKInput) return;
 
-  // Limpa mensagens de validade ao digitar
   jobIdInput.addEventListener("input", () => jobIdInput.setCustomValidity(""));
   topKInput.addEventListener("input",  () => topKInput.setCustomValidity(""));
 
   buscarBtn.addEventListener("click", async () => {
-    // Validações simples
     const jobId = jobIdInput.value.trim();
-    const kRaw  = topKInput.value.trim();
-    const k     = parseInt(kRaw, 10);
+    const k     = parseInt((topKInput.value || "").trim(), 10);
 
     if (!jobId) {
       jobIdInput.setCustomValidity("Informe o ID da vaga.");
@@ -157,7 +207,10 @@ function setupPredictButton() {
       return;
     }
 
-    // UX: desabilita o botão durante a requisição
+    // Estado de carregamento na tabela
+    renderEmptyRow("Buscando resultados...");
+
+    // UX do botão
     buscarBtn.disabled = true;
     const originalText = buscarBtn.textContent;
     buscarBtn.textContent = "Buscando...";
@@ -169,28 +222,31 @@ function setupPredictButton() {
         body: JSON.stringify({ job_id: jobId, k })
       });
 
-      // Tenta parsear JSON mesmo em erro para log útil
       const text = await res.text();
       let data = null;
       try { data = text ? JSON.parse(text) : null; } catch (_) {}
 
       if (!res.ok) {
+        const msg = (data && (data.message || data.error)) || "Não foi possível buscar resultados.";
+        renderEmptyRow(msg);
         console.error("Erro em /predict:", data ?? text);
-        // (sem UI por enquanto — tabela será preenchida no próximo passo)
         return;
       }
 
-      console.log("Resultado /predict:", data);
-      // TODO: popular a tabela (#resultsBody) no próximo passo
+      // Espera: { candidatos: [ { id, nome, cv_pt }, ... ] }
+      const candidatos = data?.candidatos ?? [];
+      renderResults(candidatos);
 
     } catch (err) {
       console.error("Falha na requisição /predict:", err);
+      renderEmptyRow("Erro de conexão. Tente novamente.");
     } finally {
       buscarBtn.disabled = false;
       buscarBtn.textContent = originalText;
     }
   });
 }
+
 
 // ===============================
 // Inicialização
