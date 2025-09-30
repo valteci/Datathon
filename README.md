@@ -141,10 +141,161 @@ docker compose up --build
 
 
 # 🚀☁️DEPLOY NO GOOGLE CLOUD
-Essa projeto foi implantado do google cloud e pode ser acessado pelo seguinte link: [http://34.39.160.178:5000/](http://34.39.160.178:5000/)
+Essa projeto foi implantado do google cloud e pode ser acessado pelo seguinte link: [http://34.39.160.178:5000/](http://34.39.160.178:5000/) <br><br><br><br>
 
 
 # 🛣️🔌ROTAS E EXEMPLOS DE CHAMADAS A API
+A API expõe 4 rotas. Os exemplos assumem a base `http://localhost:5000` (ajuste conforme seu ambiente).
+
+---
+
+### `/` — Página inicial
+**Método:** `GET`  
+**Propósito:** Retorna a página `index.html` para interação manual com a API.
+
+~~~bash
+curl -i http://localhost:5000/
+~~~
+
+**Códigos de status:** `200`
+
+---
+
+### `/upload` — Upload de vagas (JSON)
+**Método:** `POST`  
+**Content-Type:** `multipart/form-data`  
+**Propósito:** Receber um arquivo `.json` de **vagas** e carregá-lo (armazenando no Redis via `Data.load_vagas`).
+
+**Parâmetros (form-data):**
+- `vagas` (**obrigatório**): arquivo **`.json`** contendo as vagas.
+
+~~~bash
+curl -i -X POST http://localhost:5000/upload \
+  -F "vagas=@database/vagas.json;type=application/json"
+~~~
+
+**Respostas:**
+- `200` — sucesso
+  ~~~json
+  {
+    "message": "Arquivo recebido e vagas salvas no Redis com sucesso!",
+    "vagas_filename": "vagas.json"
+  }
+  ~~~
+- `400` — erro de validação (campo ausente ou extensão inválida)
+  ~~~json
+  { "error": "O arquivo de vaga e obrigatorio." }
+  ~~~
+  ~~~json
+  { "error": "O arquivo deve ser no formato .json." }
+  ~~~
+- `500` — erro interno
+  ~~~json
+  { "error": "<detalhe da exceção>" }
+  ~~~
+
+---
+
+### `/predict` — Top-K candidatos para uma vaga
+**Método:** `POST`  
+**Content-Type:** `application/json`  
+**Propósito:** Dado um **ID de vaga**, gerar o embedding da descrição e buscar no ChromaDB os **Top-K** candidatos mais similares (similaridade do cosseno).  
+**Observação:** o endpoint retorna **apenas os dados dos candidatos**; as similaridades são registradas no log/MLflow, não retornadas no payload.
+
+**Body JSON:**
+- `job_id` (**obrigatório**, `string`): ID da vaga previamente carregada via `/upload`.
+- `k` (**obrigatório**, `int > 0`): quantidade de candidatos a retornar.
+
+~~~bash
+# Exemplo 1 — k = 5
+curl -i -X POST http://localhost:5000/predict \
+  -H "Content-Type: application/json" \
+  -d '{"job_id": "vaga_123", "k": 5}'
+
+# Exemplo 2 — k = 10
+curl -i -X POST http://localhost:5000/predict \
+  -H "Content-Type: application/json" \
+  -d '{"job_id": "vaga_backend_flask", "k": 10}'
+~~~
+
+**Respostas:**
+- `200` — sucesso (estrutura depende do seu dataset; exemplo ilustrativo)
+  ~~~json
+  [
+    { "id_candidato": "12345", "cv_pt": "...", "outros_campos": "..." },
+    { "id_candidato": "67890", "cv_pt": "...", "outros_campos": "..." }
+  ]
+  ~~~
+- `400` — erros de validação
+  ~~~json
+  { "error": "O corpo da requisicao deve ser um JSON." }
+  ~~~
+  ~~~json
+  { "error": "JSON invalido." }
+  ~~~
+  ~~~json
+  { "error": "Campo 'job_id' e obrigatorio e deve ser uma string." }
+  ~~~
+  ~~~json
+  { "error": "Campo 'k' é obrigatorio." }
+  ~~~
+  ~~~json
+  { "error": "Campo 'k' deve ser um inteiro positivo." }
+  ~~~
+  ~~~json
+  { "error": "Campo 'k' deve ser um numero inteiro." }
+  ~~~
+- `500` — erro interno
+  ~~~json
+  { "error": "<detalhe da exceção>" }
+  ~~~
+
+---
+
+### `/metrics` — Métricas e histórico (MLflow)
+**Método:** `GET`  
+**Propósito:** Expor um agregado de métricas/experimentos via `Log.fetch_all` (observabilidade).
+
+**Query params:**
+- `history` (*opcional*, `true|false`, padrão `true`): inclui histórico detalhado se `true`.
+- `cap` (*opcional*, `int`, padrão `1000`): limite de itens de histórico retornados.
+
+~~~bash
+# Padrão (history=true, cap=1000)
+curl -i "http://localhost:5000/metrics"
+
+# Sem histórico e com cap reduzido
+curl -i "http://localhost:5000/metrics?history=false&cap=200"
+~~~
+
+**Respostas:**
+- `200` — sucesso (estrutura depende do `Log.fetch_all`; exemplo ilustrativo)
+  ~~~json
+  {
+    "experiments": [...],
+    "runs": [...],
+    "latest": {
+      "duration_ms": 42,
+      "k": 5,
+      "timestamp": "2025-09-30T02:15:00Z"
+    }
+  }
+  ~~~
+- `503` — MLflow indisponível / timeout
+  ~~~json
+  { "error": "mlflow_unreachable", "detail": "<mensagem de rede/timeout>" }
+  ~~~
+- `500` — erro inesperado
+  ~~~json
+  { "error": "unexpected", "detail": "<detalhe da exceção>" }
+  ~~~
+
+---
+
+### Fluxo recomendado
+1. **`/upload`** — carregue as vagas (JSON).  
+2. **`/predict`** — consulte Top-K candidatos para uma vaga.  
+3. **`/metrics`** — monitore uso/desempenho e histórico no MLflow.
 
 
 # 🔄⚙️FLUXO DE PROCESSAMENTO
