@@ -15,7 +15,7 @@ O projeto em questão é um MVP para achar os melhores candidatos para uma deter
 * Retornar os K candidatos mais similares à vaga, de modo que o usuário pode escolher o valor de K.<br><br>
 * Por fim, logar estatísticas do modelo utilizando MLflow para poder monitorar o desempenho do modelo e possíveis drifts que possam acontecer em produção ao longo do tempo.<br><br>
 
-## Stack Tecnológica:
+## 🧰 Stack Tecnológica:
 **Foram utilizados as seguintes tecnologias para construir esse projeto:**
 * **Python3 (versão 3.12)**: linguagem de programação utilizada.<br><br>
 * **poetry**: gerenciador de pacotes do python.<br><br>
@@ -29,7 +29,7 @@ O projeto em questão é um MVP para achar os melhores candidatos para uma deter
 
 
 
-# ESTRUTURA DO PROJETO
+# 🗂️ ESTRUTURA DO PROJETO
 ```
 .
 ├── Dockerfile
@@ -80,7 +80,7 @@ O projeto em questão é um MVP para achar os melhores candidatos para uma deter
 └── wsgi.py
 ```
 
-### Explicando os arquivos que estão na raiz do projeto:
+### 📁Explicando os arquivos que estão na raiz do projeto:
 * **Dockerfile:** arquivo de configuração do Docker, foi utilizado para gerar um container da API do Flask <br><br>
 * **LICENSE**: arquivo de licensa do projeto (licenciado sob a MIT License).<br><br>
 * **README.md**: este arquivo, com instruções e documentação do projeto.<br><br>
@@ -92,16 +92,16 @@ O projeto em questão é um MVP para achar os melhores candidatos para uma deter
 * **wsgi.py**: arquivo que inicia a aplicação em produção. É utilizado pelo servidor web *gunicorn* para iniciar o servidor python da API, ele contém tudo que é preciso para criar e executar a aplicação.<br><br>
 * **.env.sample**: arquivo que possui uma amostra das variáveis de ambiente do projeto, basicamente possui o valor de todas as variáveis de ambiente menos a GEMINI_API_KEY, por questões de segurança. O arquivo .env deve ser uma cópia desse arquivo, só que nele você deve preencher o valor de GEMINI_API_KEY.<br><br>
 
-### Explicando os arquivos que estão na pasta docker/:
+### 🐳 Explicando os arquivos que estão na pasta docker/:
 * **entrypoint.sh**: arquivo que é executado quando é feito o run da imagem docker. Seu propósito é fazer algumas configurações iniciais antes de iniciar a API Flask de fato, como fazer o import dos embeddings dos candidatos e definir o exemperimento no MLflow.<br><br>
 
-### Explicando os arquivos que estão na pasta scripts/:
+### 📜 Explicando os arquivos que estão na pasta scripts/:
 * **__init__.py**: arquivo que torna a pasta scripts um módulo. Seu propósito é deixar a importação mais fácil.<br><br>
 * **export_data.py**: exporta dados do banco vetorial ChromaDB para um arquivo .jsonl. Isso é útil para salvar os embeddings e fazer o load desses dados quando o programa rodar em outra máquina, por exemplo, não precisando gerar os embeddings do zero novamente. Não é usado em produção, mas foi usado em desenvolvimento para gerar o arquivo candidates_dim3072.jsonl.<br><br>
 * **generate_embeddings.py**: pega o arquivo de candidatos em database/applicants.json que estava dentro do Redis e gera os embeddings de cada candidato. Pega-se o campo "cv_pt" de cada candidato e gera-se os embeddings desse campo que é salvo no ChromaDB, perceba que esse script foi usado para gerar os embeddings e salvar no ChromaDB enquando o arquivo de cima "export_data.py" é usado para fazer o export desses dados para um arquivo.<br><br>
 * **import_data.py**: arquivo que carrega o arquivo de embeddings database/candidates_dim3072.jsonl para dentro do ChromaDB. Ele é chamado pelo docker quando inicia o serviço da API que só é iniciada quando esse import termina, ou seja, ele é bloqueante.<br><br>
 
-### Explicando os arquivos que estão na pasta src/:
+### 💻 Explicando os arquivos que estão na pasta src/:
 * **__init__.py**: arquivo que torna a pasta src um módulo. Seu propósito é deixar a importação mais fácil.<br><br>
 * **app.py**: arquivo gerado pelo padrão factory do Flask, mas não utilizado.<br><br>
 * **extensions.py**: arquivo gerado pelo padrão factory do Flask, mas não utilizado.<br><br>
@@ -119,7 +119,7 @@ O projeto em questão é um MVP para achar os melhores candidatos para uma deter
 * **services/retrieve_data.py**: arquivo responsável por implementar a classe ChromaDB como um singleton. Essa classe é responsável por se comunicar com o banco vetorial ChromaDB.<br><br>
 
 
-# INSTRUÇÕES DE DEPLOY LOCAL
+# 🚀💻INSTRUÇÕES DE DEPLOY LOCAL
 Para executar o projeto local, você precisa ter o docker e o docker compose instalado na sua máquina e então executar os seguintes passos:
 * Baixe o projeto com o seguinte comando:
 ```bash
@@ -140,12 +140,12 @@ docker compose up --build
 * Acesse a aplicação por meio do endereço [localhost:5000](http://localhost:5000)<br><br>
 
 
-# DEPLOY NO GOOGLE CLOUD
+# 🚀☁️DEPLOY NO GOOGLE CLOUD
 Essa projeto foi implantado do google cloud e pode ser acessado pelo seguinte link: [http://34.39.160.178:5000/](http://34.39.160.178:5000/)
 
 
-# ROTAS E EXEMPLOS DE CHAMADAS A API
+# 🛣️🔌ROTAS E EXEMPLOS DE CHAMADAS A API
 
 
-# FLUXO DE PROCESSAMENTO
+# 🔄⚙️FLUXO DE PROCESSAMENTO
 
