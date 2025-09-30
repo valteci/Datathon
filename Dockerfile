@@ -30,4 +30,10 @@ COPY docker/entrypoint.sh /usr/local/bin/entrypoint.sh
 RUN chmod +x /usr/local/bin/entrypoint.sh
 
 ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
-CMD ["tail",  "-f", "/dev/null"]
+#CMD ["poetry",  "run", "python3", "run.py"]
+CMD ["poetry", "run", "gunicorn", \
+        "--bind", "0.0.0.0:5000", \
+        "--workers", "1", \
+        "--timeout", "120", \
+        "wsgi:app" \
+]

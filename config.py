@@ -13,7 +13,6 @@ class DevelopmentConfig(Config):
         "DATABASE_URL", "postgresql+psycopg://user:password@localhost:5432/meubanco"
     )
 
-
 class TestingConfig(Config):
     """Configurações para testes."""
     TESTING = True
@@ -23,4 +22,4 @@ class TestingConfig(Config):
 class ProductionConfig(Config):
     """Configurações para produção."""
     DEBUG = False
-    SQLALCHEMY_DATABASE_URI = os.environ.get("DATABASE_URL")
+    #SQLALCHEMY_DATABASE_URI = os.environ.get("DATABASE_URL")
