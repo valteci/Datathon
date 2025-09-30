@@ -49,6 +49,6 @@ def export_collection_jsonl(dim: int, out_path: str, batch: int = 1000):
 #export_collection_jsonl(
 #        dim=3072,
 #        out_path="candidates_dim3072.jsonl",
-#        batch=10000,      # ajuste livremente (explico abaixo)
+#        batch=10000,
 #)
 
