@@ -1,6 +1,25 @@
 name: datathon
 
 services:
+
+  mlflow:
+    image: ghcr.io/mlflow/mlflow:latest
+    container_name: mlflow
+    command: >
+      mlflow server
+      --host 0.0.0.0
+      --port 5001
+      --backend-store-uri sqlite:////mlflow/mlflow.db
+      --serve-artifacts
+      --artifacts-destination /mlartifacts
+    volumes:
+      - mlflow_db:/mlflow
+      - mlflow_artifacts:/mlartifacts
+    ports:
+      - "5001:5001"
+    networks:
+      - datathon
+
   python:
     build: .
     container_name: python3-server
@@ -11,9 +30,12 @@ services:
       - REDIS_URL_1=redis://:${REDIS_PASSWORD}@redis:6379/1
       - REDIS_URL_2=redis://:${REDIS_PASSWORD}@redis:6379/2
       - CHROMA_URL=http://chromadb:8000
+      - MLFLOW_URL=http://mlflow:5001
+      - MODEL=${MODEL}
     depends_on:
       - redis
       - chromadb
+      - mlflow
     networks:
       - datathon
     volumes:
@@ -39,15 +61,15 @@ services:
     ports:
       - "8000:8000"
     volumes:
-#      - chroma_data:/chroma
       - chroma_data:/chroma
     networks:
       - datathon
 
 volumes:
   redis_data:
-#  chroma_data:
   chroma_data:
+  mlflow_db:
+  mlflow_artifacts:
 
 networks:
   datathon:

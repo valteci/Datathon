@@ -20,4 +20,15 @@ fi
 echo "[entrypoint] import: terminado $(date -Iseconds)"
 
 echo "[entrypoint] executando CMD: $*"
+
+
+#SETANDO EXPERIMENTO NO MLFLOW
+#=====
+MLFLOW_URL="${MLFLOW_URL:-http://mlflow:5001}"
+curl -sS -X POST "$MLFLOW_URL/api/2.0/mlflow/experiments/create" \
+  -H "Content-Type: application/json" \
+  -d '{"name":"decision-stats"}' \
+  || echo "[mlflow] experimento 'decision-stats' já existe (ok)"
+#====
+
 exec "$@"

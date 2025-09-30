@@ -1,7 +1,8 @@
 from flask import Blueprint, render_template, request, jsonify, Response
 from src.services.Data import Data
 from src.services.gemini_api import Model
-#from src.services.gemini_api import Teste
+from src.services.log import Log
+import requests
 
 # cria um blueprint chamado "main"
 bp = Blueprint("main", __name__)
@@ -9,6 +10,7 @@ bp = Blueprint("main", __name__)
 @bp.route("/")
 def index():
     return render_template("index.html")
+
 
 @bp.route("/upload", methods=["POST"])
 def upload_files():
@@ -68,12 +70,34 @@ def predict():
 
     dados = Data()
     model = Model()
+    log = Log()
+    t0 = log.timed()
 
     descricao_vaga = dados.get_vaga_descricao(vaga_id)
-    candidatos_id = model.predict(descricao_vaga, k)['ids'][0]
+    output_model = model.predict(descricao_vaga, k)
+    similaridades = output_model['similarities'][0]
+    candidatos_id = output_model['ids'][0]
 
     candidatos_json = dados.get_candidatos(candidatos_id)
 
+    log.log(duration_ms=log.timed()-t0, similarities=similaridades, k=k)
     return Response(candidatos_json, status=200, mimetype="application/json")
 
+
+@bp.route("/metrics", methods=["GET"])
+def metrics():
+    try:
+        include_history = (request.args.get("history", "true").lower() != "false")
+        cap = int(request.args.get("cap", 1000))
+    except Exception:
+        include_history, cap = True, 1000
+
+    try:
+        data = Log.fetch_all(include_history=include_history, cap_history=cap)
+        return jsonify(data), 200
+    except requests.RequestException as e:
+        # MLflow fora do ar, timeout, etc.
+        return jsonify({"error": "mlflow_unreachable", "detail": str(e)}), 503
+    except Exception as e:
+        return jsonify({"error": "unexpected", "detail": str(e)}), 500
 

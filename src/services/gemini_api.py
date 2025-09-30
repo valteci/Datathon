@@ -32,7 +32,7 @@ class Model:
 
         result = [
             np.array(e.values) for e in self.client.models.embed_content(
-                model="gemini-embedding-001",
+                model=os.getenv('MODEL','gemini-embedding-001'),
                 contents=texts,
                 config=types.EmbedContentConfig(task_type="SEMANTIC_SIMILARITY")).embeddings
         ]
