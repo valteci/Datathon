@@ -1,7 +1,7 @@
 # ✨VISÃO GERAL DO PROJETO
 O projeto tenta otimizar um dos processos de RH que é o *matching* de candidatos para a empresa [Decision](https://webrh.decisionbr.com.br/).<br><br>
 
-A dor a ser resolvida nesse projeto consiste em fazer um MVP que seja capaz de responder à seguinte pergunta: dado uma vaga específica, quais seriam os melhores candidatos para essa vaga considerando que eu tenho o texto dos currículos dos candidatos armazenados no sistema, utilizando-se de soluções de inteligência artificial.<br><br>
+A dor a ser resolvida nesse projeto consiste em fazer um MVP que seja capaz de responder à seguinte pergunta: dada uma vaga específica, quais seriam os melhores candidatos para essa vaga considerando que eu tenho o texto dos currículos dos candidatos armazenados no sistema, utilizando-se de soluções de inteligência artificial.<br><br>
 
 Para isso, foram utilizadas técnicas de *embeddings* e similaridade do cosseno que serão detalhadas ao longo deste documento.<br><br>
 
@@ -16,10 +16,10 @@ O projeto em questão é um MVP para achar os melhores candidatos para uma deter
 * Por fim, logar estatísticas do modelo utilizando MLflow para poder monitorar o desempenho do modelo e possíveis drifts que possam acontecer em produção ao longo do tempo.<br><br>
 
 ## 🧰 Stack Tecnológica:
-**Foram utilizados as seguintes tecnologias para construir esse projeto:**
+**Foram utilizadas as seguintes tecnologias para construir esse projeto:**
 * **Python3 (versão 3.12)**: linguagem de programação utilizada.<br><br>
 * **poetry**: gerenciador de pacotes do python.<br><br>
-* **Docker e Docker compose**: conteinerização e orquestração dos serviços (API, ChromaDB, Redis e, MLflow).<br><br>
+* **Docker e Docker compose**: conteinerização e orquestração dos serviços (API, ChromaDB, Redis e MLflow).<br><br>
 * **ChromaDB**: banco vetorial para armazenar e consultar embeddings semânticos.<br><br>
 * **Redis**: armazenamento chave-valor em memória, de alta performance.<br><br>
 * **MLflow**: rastreamento de experimentos (parâmetros, métricas e artefatos).<br><br>
@@ -82,7 +82,7 @@ O projeto em questão é um MVP para achar os melhores candidatos para uma deter
 
 ### 📁Explicando os arquivos que estão na raiz do projeto:
 * **Dockerfile:** arquivo de configuração do Docker, foi utilizado para gerar um container da API do Flask <br><br>
-* **LICENSE**: arquivo de licensa do projeto (licenciado sob a MIT License).<br><br>
+* **LICENSE**: arquivo de licença do projeto (licenciado sob a MIT License).<br><br>
 * **README.md**: este arquivo, com instruções e documentação do projeto.<br><br>
 * **config.py**: arquivo usado no padrão Application Factory do Flask, centraliza as configurações para *development*, *test* e *production* (geralmente lendo variáveis do ambiente/.env).<br><br>
 * **docker-compose.yml**: arquivo de configuração do Docker compose, é responsável por declarar os serviços do sistema bem como configurar o ambiente de cada um deles.<br><br>
@@ -93,12 +93,12 @@ O projeto em questão é um MVP para achar os melhores candidatos para uma deter
 * **.env.sample**: arquivo que possui uma amostra das variáveis de ambiente do projeto, basicamente possui o valor de todas as variáveis de ambiente menos a GEMINI_API_KEY, por questões de segurança. O arquivo .env deve ser uma cópia desse arquivo, só que nele você deve preencher o valor de GEMINI_API_KEY.<br><br>
 
 ### 🐳 Explicando os arquivos que estão na pasta docker/:
-* **entrypoint.sh**: arquivo que é executado quando é feito o run da imagem docker. Seu propósito é fazer algumas configurações iniciais antes de iniciar a API Flask de fato, como fazer o import dos embeddings dos candidatos e definir o exemperimento no MLflow.<br><br>
+* **entrypoint.sh**: arquivo que é executado quando é feito o run da imagem docker. Seu propósito é fazer algumas configurações iniciais antes de iniciar a API Flask de fato, como fazer o import dos embeddings dos candidatos e definir o experimento no MLflow.<br><br>
 
 ### 📜 Explicando os arquivos que estão na pasta scripts/:
 * **__init__.py**: arquivo que torna a pasta scripts um módulo. Seu propósito é deixar a importação mais fácil.<br><br>
 * **export_data.py**: exporta dados do banco vetorial ChromaDB para um arquivo .jsonl. Isso é útil para salvar os embeddings e fazer o load desses dados quando o programa rodar em outra máquina, por exemplo, não precisando gerar os embeddings do zero novamente. Não é usado em produção, mas foi usado em desenvolvimento para gerar o arquivo candidates_dim3072.jsonl.<br><br>
-* **generate_embeddings.py**: pega o arquivo de candidatos em database/applicants.json que estava dentro do Redis e gera os embeddings de cada candidato. Pega-se o campo "cv_pt" de cada candidato e gera-se os embeddings desse campo que é salvo no ChromaDB, perceba que esse script foi usado para gerar os embeddings e salvar no ChromaDB enquando o arquivo de cima "export_data.py" é usado para fazer o export desses dados para um arquivo.<br><br>
+* **generate_embeddings.py**: pega o arquivo de candidatos em database/applicants.json que estava dentro do Redis e gera os embeddings de cada candidato. Pega-se o campo "cv_pt" de cada candidato e geram-se os embeddings desse campo que é salvo no ChromaDB, perceba que esse script foi usado para gerar os embeddings e salvar no ChromaDB enquanto o arquivo de cima "export_data.py" é usado para fazer o export desses dados para um arquivo.<br><br>
 * **import_data.py**: arquivo que carrega o arquivo de embeddings database/candidates_dim3072.jsonl para dentro do ChromaDB. Ele é chamado pelo docker quando inicia o serviço da API que só é iniciada quando esse import termina, ou seja, ele é bloqueante.<br><br>
 
 ### 💻 Explicando os arquivos que estão na pasta src/:
@@ -120,7 +120,7 @@ O projeto em questão é um MVP para achar os melhores candidatos para uma deter
 
 
 # 🚀💻INSTRUÇÕES DE DEPLOY LOCAL
-Para executar o projeto local, você precisa ter o docker e o docker compose instalado na sua máquina e então executar os seguintes passos:
+Para executar o projeto local, você precisa ter o docker e o docker compose instalados na sua máquina e então executar os seguintes passos:
 * Baixe o projeto com o seguinte comando:
 ```bash
 git clone https://github.com/valteci/Datathon.git
@@ -130,7 +130,8 @@ git clone https://github.com/valteci/Datathon.git
 cd Datathon
 ```
 * Crie uma pasta chamada "database" na raiz do projeto. A versão entregue aos professores já possui essa pasta, não precisa criá-la caso seja o professor.<br><br>
-* Baixe [esse arquivo](https://drive.google.com/file/d/16TV4tOEU45j0Uq457uU2JIp8vEx9lHuv/view?usp=sharing) e coloque-o dentro da pasta database. A versão entregue aos professores já possui esse arquivo, não precisa baixá-lo caso seja o professor.<br><br>
+* Baixe [o arquivo de embeddings](https://drive.google.com/file/d/16TV4tOEU45j0Uq457uU2JIp8vEx9lHuv/view?usp=sharing) e coloque-o dentro da pasta database. A versão entregue aos professores já possui esse arquivo, não precisa baixá-lo caso seja o professor.<br><br>
+* Baixe [os arquivos da Decision](https://drive.google.com/drive/folders/1f3jtTRyOK-PBvND3JTPTAxHpnSrH7rFR) e coloque-os dentro da pasta database. A versão entregue aos professores já possui esses arquivos, não precisa baixá-los caso seja o professor.<br><br>
 * Criar o arquivo ".env" na raiz do projeto, ele é uma cópia do arquivo .env.sample que já vem no projeto, mas você precisa preencher a variável de ambiente GEMINI_API_KEY com uma chave válida dentro do arquivo .env. A versão entregue aos professores já possui um .env válido, não precisa criá-lo caso seja um professor.<br><br>
 * Na raiz do projeto, executar o seguinte comando para rodar a aplicação:
 ```bash
@@ -141,11 +142,11 @@ docker compose up --build
 
 
 # 🚀☁️DEPLOY NO GOOGLE CLOUD
-Essa projeto foi implantado do google cloud e pode ser acessado pelo seguinte link: [http://34.39.160.178:5000/](http://34.39.160.178:5000/) <br><br><br><br>
+Esse projeto foi implantado do google cloud e pode ser acessado pelo seguinte link: [http://34.39.160.178:5000/](http://34.39.160.178:5000/) <br><br><br><br>
 
 
-# 🛣️🔌ROTAS E EXEMPLOS DE CHAMADAS A API
-A API expõe 4 rotas. Os exemplos assumem a base `http://localhost:5000` (ajuste conforme seu ambiente).
+# 🛣️🔌ROTAS E EXEMPLOS DE CHAMADAS À API
+A API expõe 4 rotas. Os exemplos assumem a base `http://34.39.160.178:5000`. Ou então `http://localhost:5000` (ajuste conforme seu ambiente) caso queira testar localmente.
 
 ---
 
@@ -154,7 +155,7 @@ A API expõe 4 rotas. Os exemplos assumem a base `http://localhost:5000` (ajuste
 **Propósito:** Retorna a página `index.html` para interação manual com a API.
 
 ~~~bash
-curl -i http://localhost:5000/
+curl -i http://34.39.160.178:5000/
 ~~~
 
 **Códigos de status:** `200`
@@ -170,7 +171,7 @@ curl -i http://localhost:5000/
 - `vagas` (**obrigatório**): arquivo **`.json`** contendo as vagas.
 
 ~~~bash
-curl -i -X POST http://localhost:5000/upload \
+curl -i -X POST http://34.39.160.178:5000/upload \
   -F "vagas=@database/vagas.json;type=application/json"
 ~~~
 
@@ -208,12 +209,12 @@ curl -i -X POST http://localhost:5000/upload \
 
 ~~~bash
 # Exemplo 1 — k = 5
-curl -i -X POST http://localhost:5000/predict \
+curl -i -X POST http://34.39.160.178:5000/predict \
   -H "Content-Type: application/json" \
   -d '{"job_id": "vaga_123", "k": 5}'
 
 # Exemplo 2 — k = 10
-curl -i -X POST http://localhost:5000/predict \
+curl -i -X POST http://34.39.160.178:5000/predict \
   -H "Content-Type: application/json" \
   -d '{"job_id": "vaga_backend_flask", "k": 10}'
 ~~~
@@ -262,10 +263,10 @@ curl -i -X POST http://localhost:5000/predict \
 
 ~~~bash
 # Padrão (history=true, cap=1000)
-curl -i "http://localhost:5000/metrics"
+curl -i "http://34.39.160.178:5000/metrics"
 
 # Sem histórico e com cap reduzido
-curl -i "http://localhost:5000/metrics?history=false&cap=200"
+curl -i "http://34.39.160.178:5000/metrics?history=false&cap=200"
 ~~~
 
 **Respostas:**
@@ -295,8 +296,50 @@ curl -i "http://localhost:5000/metrics?history=false&cap=200"
 ### Fluxo recomendado
 1. **`/upload`** — carregue as vagas (JSON).  
 2. **`/predict`** — consulte Top-K candidatos para uma vaga.  
-3. **`/metrics`** — monitore uso/desempenho e histórico no MLflow.
-
+3. **`/metrics`** — monitore uso/desempenho e histórico no MLflow.<br><br>
 
 # 🔄⚙️FLUXO DE PROCESSAMENTO
+Abaixo está o fluxo de ponta a ponta — do **boot** do sistema à **consulta** e ao **monitoramento**.
+
+---
+
+## 1) Boot do contêiner (pré-processamento/bulk load)
+- O `entrypoint.sh` é executado quando o contêiner inicia.
+- Ele roda `scripts/import_data.py`, que **importa os embeddings de candidatos** a partir de `database/candidates_dim3072.jsonl` para o **ChromaDB** (passo **bloqueante**).
+- Define o **experimento** no **MLflow** e configura logs.
+- **Objetivo:** garantir que o **banco vetorial** esteja populado antes de atender requisições.
+
+> Resultado: ChromaDB pronto; API sobe somente após o término do import.
+
+---
+
+## 2) Upload de vagas (`POST /upload`)
+- O cliente envia um arquivo `vagas.json` (multipart/form-data, campo `vagas`).
+- A API chama `Data.load_vagas(...)` e **carrega/normaliza** as vagas no **Redis**.
+- **Objetivo:** deixar as vagas disponíveis por `id` para consultas subsequentes.
+
+---
+
+## 3) Predição de Top-K (`POST /predict`)
+- O cliente envia `{ "vaga_id": "<id>", "k": <int> }`.
+- A API:
+  1. Valida `vaga_id` e `k`.
+  2. Usa `Data.get_vaga_descricao(jobvaga_id_id)` para obter o **texto base** da vaga (do Redis).
+  3. Usa `Model.predict(...)` para **gerar o embedding** da vaga (via **Gemini API**).
+  4. Consulta o **ChromaDB** com esse embedding e retorna os **Top-K IDs de candidatos** + similaridades.
+  5. Busca os **dados completos** desses candidatos via `Data.get_candidatos(ids)`.
+  6. **Registra** no **MLflow**: `duration_ms`, `similarities`, `k`.
+  7. Responde com o **JSON dos candidatos**.
+
+> Observação: os **scores de similaridade** não são enviados na resposta — ficam registrados no MLflow.
+
+---
+
+## 4) Métricas e histórico (`GET /metrics`)
+- Endpoint de **observabilidade** que agrega informações via `Log.fetch_all(...)`.
+- Query params:
+  - `history` (`true|false`, padrão `true`): incluir histórico detalhado.
+  - `cap` (int, padrão `1000`): limite do histórico retornado.
+
+- **Objetivo:** obter estatísticas das predições e do modelo.
 
